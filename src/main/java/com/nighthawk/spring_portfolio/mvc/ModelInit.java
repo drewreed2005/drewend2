@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nighthawk.spring_portfolio.mvc.jokes.Jokes;
 import com.nighthawk.spring_portfolio.mvc.jokes.JokesJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.survey.Survey;
+import com.nighthawk.spring_portfolio.mvc.survey.SurveyJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.note.Note;
 import com.nighthawk.spring_portfolio.mvc.note.NoteJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.person.Person;
@@ -19,6 +21,7 @@ import java.util.List;
 @Configuration // Scans Application for ModelInit Bean, this detects CommandLineRunner
 public class ModelInit {  
     @Autowired JokesJpaRepository jokesRepo;
+    @Autowired SurveyJpaRepository surveyRepo;
     @Autowired NoteJpaRepository noteRepo;
     @Autowired PersonDetailsService personService;
 
@@ -32,6 +35,14 @@ public class ModelInit {
                 List<Jokes> jokeFound = jokesRepo.findByJokeIgnoreCase(joke);  // JPA lookup
                 if (jokeFound.size() == 0)
                     jokesRepo.save(new Jokes(null, joke, 0, 0)); //JPA save
+            }
+
+            // survey is populated with initial survey questions
+            String[] surveyArray = Survey.init();
+            for (String survey : surveyArray) {
+                List<Survey> surveyFound = surveyRepo.findBySurveyIgnoreCase(survey);  // JPA lookup
+                if (surveyFound.size() == 0)
+                    surveyRepo.save(new Survey(null, survey, 0, 0, 0)); //JPA save
             }
 
             // Person database is populated with test data
