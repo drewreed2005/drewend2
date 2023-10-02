@@ -28,6 +28,13 @@ public class ModelInit {
     @Bean
     CommandLineRunner run() {  // The run() method will be executed after the application starts
         return args -> {
+            // survey is populated with initial survey questions
+            String[] surveyArray = Survey.init();
+            for (String survey : surveyArray) {
+                List<Survey> surveyFound = surveyRepo.findBySurveyIgnoreCase(survey);  // JPA lookup
+                if (surveyFound.size() == 0)
+                    surveyRepo.save(new Survey(null, survey, 0, 0, 0)); //JPA save
+            }
 
             // Joke database is populated with starting jokes
             String[] jokesArray = Jokes.init();
@@ -35,14 +42,6 @@ public class ModelInit {
                 List<Jokes> jokeFound = jokesRepo.findByJokeIgnoreCase(joke);  // JPA lookup
                 if (jokeFound.size() == 0)
                     jokesRepo.save(new Jokes(null, joke, 0, 0)); //JPA save
-            }
-
-            // survey is populated with initial survey questions
-            String[] surveyArray = Survey.init();
-            for (String survey : surveyArray) {
-                List<Survey> surveyFound = surveyRepo.findBySurveyIgnoreCase(survey);  // JPA lookup
-                if (surveyFound.size() == 0)
-                    surveyRepo.save(new Survey(null, survey, 0, 0, 0)); //JPA save
             }
 
             // Person database is populated with test data

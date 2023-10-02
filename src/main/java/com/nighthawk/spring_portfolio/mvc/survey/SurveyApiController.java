@@ -21,7 +21,7 @@ public class SurveyApiController {
      */
     @GetMapping("/")
     public ResponseEntity<List<Survey>> getSurvey() {
-        // ResponseEntity returns List of Jokes provide by JPA findAll()
+        // ResponseEntity returns List of survey questions provide by JPA findAll()
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
